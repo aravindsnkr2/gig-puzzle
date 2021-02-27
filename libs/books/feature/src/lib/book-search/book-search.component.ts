@@ -40,7 +40,7 @@ export class BookSearchComponent implements OnInit {
   formatDate(date: void | string) {
     return date
       ? new Intl.DateTimeFormat('en-US').format(new Date(date))
-      : undefined;
+      : 'Date Unavailable';
   }
 
   addBookToReadingList(book: Book) {
