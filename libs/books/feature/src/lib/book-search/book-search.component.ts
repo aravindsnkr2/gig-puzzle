@@ -5,10 +5,12 @@ import {
   clearSearch,
   getAllBooks,
   ReadingListBook,
+  removeFromReadingList,
   searchBooks
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tmo-book-search',
@@ -17,6 +19,7 @@ import { Book } from '@tmo/shared/models';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
+  snackbarRef: MatSnackBarRef<SimpleSnackBar>;
 
   searchForm = this.fb.group({
     term: ''
@@ -24,7 +27,8 @@ export class BookSearchComponent implements OnInit {
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly snackbar: MatSnackBar
   ) {}
 
   get searchTerm(): string {
@@ -44,6 +48,12 @@ export class BookSearchComponent implements OnInit {
   }
 
   addBookToReadingList(book: Book) {
+    this.snackbarRef = this.snackbar.open('Added to Reading List', 'Undo', {
+      duration: 3000
+    });
+    this.snackbarRef.onAction().subscribe(() => {
+      this.store.dispatch(removeFromReadingList({ item: {bookId: book.id, ...book}}))
+    })
     this.store.dispatch(addToReadingList({ book }));
   }
 
