@@ -7,13 +7,13 @@
       placeholder="Search for books to add to your reading list"
       formControlName="term"
     />
-    <button mat-icon-button matSuffix>
+    <button mat-icon-button matSuffix aria-label="Search">
       <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>
 </form>
 
-<ng-container *ngIf="searchTerm; else empty">
+<ng-container *ngIf="books.length > 0; else empty">
   <div class="book-grid">
     <div class="book" data-testing="book-item" *ngFor="let b of books">
       <div class="book--title">
@@ -21,7 +21,7 @@
       </div>
       <div class="book--content">
         <div class="book--content--cover">
-          <img src="{{ b.coverUrl }}" />
+          <img src="{{ b.coverUrl }}" alt="Cover picture of the book"/>
         </div>
         <div class="book--content--info">
           <div><strong>Author:</strong> {{ b.authors.join(',') }}</div>
@@ -34,6 +34,7 @@
             <button
               mat-flat-button
               color="primary"
+              aria-label="Add the book to reading list"
               (click)="addBookToReadingList(b)"
               [disabled]="b.isAdded"
             >
@@ -48,7 +49,7 @@
 <ng-template #empty>
   <div class="empty">
     <p>
-      Try searching for a topic, for example "<a (click)="searchExample()"
+      Try searching for a topic, for example "<a aria-label="Search for JavaScript" tabindex="0" (click)="searchExample()"
         >JavaScript</a
       >".
     </p>
